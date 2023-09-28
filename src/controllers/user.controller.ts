@@ -108,6 +108,91 @@ class UserController {
       next(error);
     }
   }
+
+  async parkCar(
+    request: RequestWithUser,
+    response: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      if (!request.user) {
+        throw {
+          statusCode: 401,
+          message: "Unauthorized",
+        };
+      }
+
+      const errors = validationResult(request);
+
+      if (!errors.isEmpty()) {
+        const error = new Error("Validation failed.") as any;
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
+      }
+
+      const { carId, parkingZoneId } = request.body;
+
+      await UserService.parkCar(carId, parkingZoneId, request.user.id);
+
+      return response.status(201).json({ status: "success" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async unparkCar(
+    request: RequestWithUser,
+    response: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      if (!request.user) {
+        throw {
+          statusCode: 401,
+          message: "Unauthorized",
+        };
+      }
+
+      const errors = validationResult(request);
+
+      if (!errors.isEmpty()) {
+        const error = new Error("Validation failed.") as any;
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
+      }
+
+      const { carId } = request.body;
+
+      await UserService.unparkCar(carId, request.user.id);
+
+      return response.status(201).json({ status: "success" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getParkingHistory(
+    request: RequestWithUser,
+    response: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      if (!request.user) {
+        throw {
+          statusCode: 401,
+          message: "Unauthorized",
+        };
+      }
+
+      const data = await UserService.getParkingHistory(request.user.id);
+
+      return response.status(201).json({ status: "success", data });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new UserController();

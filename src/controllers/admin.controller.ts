@@ -2,6 +2,7 @@ import express from "express";
 import { validationResult } from "express-validator";
 import { RequestWithUser } from "../repositories/user.repository";
 import ParkingZoneService from "../services/parkingZone.service";
+import ParkingZoneCarsService from "../services/parkingZoneCars.service";
 
 class AdminController {
   async createParkingZone(
@@ -36,6 +37,27 @@ class AdminController {
       return response
         .status(201)
         .json({ status: "success", data: parkingZone });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getParkingZoneHistory(
+    request: RequestWithUser,
+    response: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      if (request.user?.role !== "Admin") {
+        throw {
+          statusCode: 401,
+          message: "Unauthorized",
+        };
+      }
+
+      const data = await ParkingZoneCarsService.getParkingZoneHistory();
+
+      return response.status(200).json({ status: "success", data });
     } catch (error) {
       next(error);
     }

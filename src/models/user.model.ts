@@ -17,7 +17,7 @@ export const User = sequelize.define("User", {
     allowNull: false,
   },
   balance: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.FLOAT,
     defaultValue: 100,
   },
   role: {

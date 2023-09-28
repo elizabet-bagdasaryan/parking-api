@@ -20,7 +20,7 @@ export const ParkingZone = sequelize.define("ParkingZone", {
     unique: true,
   },
   rate: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
 });

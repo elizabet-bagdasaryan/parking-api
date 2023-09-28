@@ -63,4 +63,25 @@ router.post(
   UserController.addCar
 );
 
+router.post(
+  "/park-car",
+  [
+    body("carId").exists().trim().not().isEmpty(),
+    body("parkingZoneId").exists().trim().not().isEmpty(),
+  ],
+  UserController.parkCar
+);
+
+router.post(
+  "/unpark-car",
+  [body("carId").exists().trim().not().isEmpty()],
+  UserController.unparkCar
+);
+
+router.get(
+  "/parking-history",
+  [body("carId").exists().trim().not().isEmpty()],
+  UserController.getParkingHistory
+);
+
 export default router;

@@ -3,7 +3,7 @@ import { sequelize } from "../config/db.config";
 import { User } from "../models/user.model";
 
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   email: string;
   password: string;
@@ -30,9 +30,14 @@ class UserRepository {
     this.db = sequelize;
   }
 
+  async getUser(id: number) {
+    const user = await User.findOne({ where: { id } });
+    return user?.dataValues as IUser;
+  }
+
   async getUserByEmail(email: string) {
     const user = await User.findOne({ where: { email } });
-    return user;
+    return user?.dataValues as IUser;
   }
 
   async createUser(user: UserInput) {
@@ -40,7 +45,10 @@ class UserRepository {
     return data;
   }
 
-  async updateUser(userId: string, updates: { password: string }) {
+  async updateUser(
+    userId: number,
+    updates: { password?: string; balance?: number }
+  ) {
     const foundUser = await User.findByPk(userId);
 
     if (!foundUser) {
@@ -49,7 +57,7 @@ class UserRepository {
       error.statusCode = 404;
       throw error;
     }
-    await User.update(
+    return await User.update(
       { ...updates },
       {
         where: {

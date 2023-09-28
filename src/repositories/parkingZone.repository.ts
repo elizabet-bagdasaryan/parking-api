@@ -2,7 +2,7 @@ import { sequelize } from "../config/db.config";
 import { ParkingZone } from "../models/parkingZone.model";
 
 interface IParkingZone {
-  id: string;
+  id: number;
   name: string;
   address: string;
   rate: number;
@@ -21,9 +21,11 @@ class ParkingZoneRepository {
     this.db = sequelize;
   }
 
-  async getParkingZone() {
-    const parkingZones = await ParkingZone.findAll();
-    return parkingZones;
+  async getParkingZone(parkingZoneId: number) {
+    const parkingZone = await ParkingZone.findOne({
+      where: { id: parkingZoneId },
+    });
+    return parkingZone?.dataValues;
   }
 
   async createParkingZone(
@@ -44,7 +46,7 @@ class ParkingZoneRepository {
   }
 
   async updateParkingZone(
-    parkingZoneId: string,
+    parkingZoneId: number,
     parkingZone: ParkingZoneInput
   ) {
     const foundParkingZone = await ParkingZone.findByPk(parkingZoneId);
@@ -65,7 +67,7 @@ class ParkingZoneRepository {
     );
   }
 
-  async deleteParkingZone(parkingZoneId: string) {
+  async deleteParkingZone(parkingZoneId: number) {
     const foundParkingZone = await ParkingZone.findByPk(parkingZoneId);
 
     if (!foundParkingZone) {

@@ -1,9 +1,6 @@
 import express from "express";
 import "./config/firebase.config";
 import { sequelize } from "./config/db.config";
-import { User } from "./models/user.model";
-import { Car } from "./models/car.model";
-import { ParkingZone, ParkingZoneCars } from "./models/parkingZone.model";
 import UserService from "./services/user.service";
 import { RequestWithUser } from "./repositories/user.repository";
 import userRouter from "./routes/user.route";

@@ -14,4 +14,6 @@ router.post(
   AdminController.createParkingZone
 );
 
+router.get("/parking-history", AdminController.getParkingZoneHistory);
+
 export default router;

@@ -2,12 +2,12 @@ import { sequelize } from "../config/db.config";
 import { Car } from "../models/car.model";
 
 export interface ICar {
-  id: string;
+  id: number;
   brand: string;
   number: string;
   type: string;
   year: string;
-  UserId: string;
+  UserId: number;
 }
 
 export interface CarInput {
@@ -15,7 +15,7 @@ export interface CarInput {
   number: string;
   type: string;
   year: string;
-  UserId: string;
+  UserId: number;
 }
 
 class CarRepository {
@@ -25,9 +25,9 @@ class CarRepository {
     this.db = sequelize;
   }
 
-  async getCar(carId: string) {
+  async getCar(carId: number) {
     const car = await Car.findOne({ where: { id: carId } });
-    return car;
+    return car?.dataValues;
   }
 
   async createCar(car: CarInput) {
@@ -35,7 +35,7 @@ class CarRepository {
     return data.dataValues;
   }
 
-  async updateCar(carId: string, car: CarInput) {
+  async updateCar(carId: number, car: CarInput) {
     const foundCar = await Car.findByPk(carId);
 
     if (!foundCar) {
@@ -54,7 +54,7 @@ class CarRepository {
     );
   }
 
-  async deleteCar(carId: string) {
+  async deleteCar(carId: number) {
     const foundCar = await Car.findByPk(carId);
 
     if (!foundCar) {
@@ -69,6 +69,11 @@ class CarRepository {
         id: carId,
       },
     });
+  }
+
+  async getUserCars(userId: number) {
+    const cars = await Car.findAll({ where: { UserId: userId } });
+    return cars.map((item) => item.dataValues);
   }
 }
 
