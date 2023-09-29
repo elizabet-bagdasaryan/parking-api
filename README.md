@@ -8,6 +8,7 @@ This Restful API uses following technologies:
 - **Firebase** - for authentication, managing users and password resetting
 - **PostgreSQL** - as a database
 - **Docker-compose** - for creating and running PostgreSQL database and the API in containers
+- **Jest** - for unit tests
 - **Express validator** - for validating request bodies
 
 ## Installation
